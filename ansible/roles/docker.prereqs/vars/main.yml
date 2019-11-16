@@ -1,0 +1,20 @@
+---
+# vars file for prereqs
+prereqs_packages:
+  - vim
+  - htop
+  - tmux
+  - stress
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - software-properties-common
+  - python-pip
+  - python-dev
+  - build-essential 
+  - virtualenv
+  - sshpass
+docker_packages:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io

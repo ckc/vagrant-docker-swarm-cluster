@@ -1,0 +1,56 @@
+---
+- hosts: swarm-master-1
+  environment:
+    EMAIL: admin@intra.local.com
+    DOMAIN: intra.local.com
+    USERNAME: admin
+    PASSWORD: admin
+    # HASHED_PASSWORD=$(openssl passwd -apr1 $PASSWORD)
+    HASHED_PASSWORD: $apr1$bM.fGh8.$GBbLv9Ya00z.Q11.U7.fL.
+    CONSUL_REPLICAS: 3
+    TRAEFIK_REPLICAS: 2
+
+  tasks:
+    - name: reset ssh connection to allow user changes to affect 'current login user'
+      meta: reset_connection
+
+    - name: Pull repo for Swarm stacks
+      git:
+        repo: 'git@github.com:bcochofel/vagrant-docker-swarm-cluster.git'
+        dest: $HOME/vagrant-docker-swarm-cluster
+        version: master
+        accept_hostkey: yes
+
+    - name: Create traefik-public overlay network
+      shell: "docker network create --driver=overlay traefik-public > traefik-public.txt"
+      args:
+        creates: traefik-public.txt
+      tags:
+        - traefik
+
+    - name: Deploy traefik-consul stack
+      docker_stack:
+        state: present
+        name: traefik-consul
+        compose:
+          - $HOME/vagrant-docker-swarm-cluster/swarm-stacks/traefik_consul-stack/docker-compose.yml
+      tags:
+        - traefik
+
+    - name: Deploy swarmpit stack
+      docker_stack:
+        state: present
+        name: swarmpit
+        compose:
+          - $HOME/vagrant-docker-swarm-cluster/swarm-stacks/web_ui-stack/docker-compose.swarmpit.traefik.yml
+      tags:
+        - traefik
+
+    - name: Deploy portainer stack
+      docker_stack:
+        state: present
+        name: portainer
+        compose:
+          - $HOME/vagrant-docker-swarm-cluster/swarm-stacks/web_ui-stack/docker-compose.portainer.traefik.yml
+      tags:
+        - traefik

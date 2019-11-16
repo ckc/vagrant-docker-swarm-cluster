@@ -1,0 +1,67 @@
+version: '3.3'
+
+networks:
+  default:
+    driver: overlay
+    attachable: true
+
+volumes:
+  db-data: {}
+
+services:
+  app:
+    image: swarmpit/swarmpit:latest
+    environment:
+      - SWARMPIT_DB=http://db:5984
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - 888:8080
+    networks:
+      - default
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 1024M
+        reservations:
+          cpus: '0.25'
+          memory: 512M
+      placement:
+        constraints:
+          - node.role == manager
+
+  db:
+    image: couchdb:2.3.0
+    volumes:
+      - db-data:/opt/couchdb/data
+    networks:
+      - default
+    deploy:
+      resources:
+        limits:
+          cpus: '0.30'
+          memory: 512M
+        reservations:
+          cpus: '0.15'
+          memory: 256M
+
+  agent:
+    image: swarmpit/agent:latest
+    environment:
+      - DOCKER_API_VERSION=1.35
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - default
+    deploy:
+      mode: global
+      labels:
+        swarmpit.agent: 'true'
+      resources:
+        limits:
+          cpus: '0.10'
+          memory: 64M
+        reservations:
+          cpus: '0.05'
+          memory: 32M

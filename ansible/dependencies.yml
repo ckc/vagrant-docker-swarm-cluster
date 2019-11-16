@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: true
+  roles:
+    - docker.prereqs
+  tasks:
+    - name: Install pip modules
+      pip:
+        name:
+          - jsondiff
+          - pyyaml
+
+    - name: Ensure docker daemon is running
+      service:
+        name: docker
+        state: started

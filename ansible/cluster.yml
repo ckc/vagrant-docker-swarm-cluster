@@ -1,0 +1,50 @@
+- hosts: swarm-master-1
+  become: true
+
+  tasks:
+    - name: Initialize the cluster
+      shell: docker swarm init --advertise-addr 192.168.77.10 >> cluster_initialized.txt
+      args:
+        chdir: $HOME
+        creates: cluster_initialized.txt
+
+- hosts: swarm-master-1
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Get master join command
+      command: docker swarm join-token manager
+      register: master_join_command_raw
+
+    - name: Set master join command
+      set_fact:
+        master_join_command: "{{ master_join_command_raw.stdout_lines[2] }}"
+
+    - name: Get worker join command
+      command: docker swarm join-token worker
+      register: worker_join_command_raw
+
+    - name: Set worker join command
+      set_fact:
+        worker_join_command: "{{ worker_join_command_raw.stdout_lines[2] }}"
+
+- hosts: masters,!swarm-master-1
+  become: true
+
+  tasks:
+    - name: Master joins cluster
+      shell: "{{ hostvars['swarm-master-1'].master_join_command }} >> node_joined.txt"
+      args:
+        chdir: $HOME
+        creates: node_joined.txt
+
+- hosts: workers
+  become: true
+
+  tasks:
+    - name: Workers join cluster
+      shell: "{{ hostvars['swarm-master-1'].worker_join_command }} >> node_joined.txt"
+      args:
+        chdir: $HOME
+        creates: node_joined.txt

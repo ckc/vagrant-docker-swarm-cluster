@@ -1,0 +1,19 @@
+- hosts: swarm-master-1
+
+  tasks:
+    - name: reset ssh connection to allow user changes to affect 'current login user'
+      meta: reset_connection
+
+    - name: Pull repo for Swarm stacks
+      git:
+        repo: 'git@github.com:bcochofel/vagrant-docker-swarm-cluster.git'
+        dest: $HOME/vagrant-docker-swarm-cluster
+        version: master
+        accept_hostkey: yes
+
+    - name: Create WEB UI stack
+      docker_stack:
+        state: present
+        name: web_ui
+        compose:
+          - $HOME/vagrant-docker-swarm-cluster/swarm-stacks/web_ui-stack/docker-compose.swarmpit.yml
