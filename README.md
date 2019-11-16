@@ -14,6 +14,10 @@ vagrant plugin install vagrant-hostmanager
 vagrant up
 ```
 
+On Windows take a look at:
+
+[Vagrant hostmanager plugin](https://github.com/devopsgroup-io/vagrant-hostmanager)
+
 If the provision of the swarm stack fails you can execute only the provision part:
 
 ```bash
