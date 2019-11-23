@@ -1,7 +1,29 @@
 ---
 - hosts: all
   become: true
+  vars:
+    prereqs_packages:
+      - vim
+      - htop
+      - tmux
+      - stress
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+      - python-pip
+      - python-dev
+      - build-essential 
+      - virtualenv
+      - sshpass
   tasks:
+    - name: Install required system packages
+      apt:
+        name: "{{ prereqs_packages }}"
+        state: present
+        update_cache: true
+        force: yes
+      become: true
     - name: Install pip modules
       pip:
         name:
