@@ -1,0 +1,13 @@
+### Vagrant ###
+.vagrant/
+
+# Python
+*.pyc
+
+# Ansible
+*.retry
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class

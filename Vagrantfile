@@ -21,6 +21,8 @@ Vagrant.configure("2") do |config|
   config.ssh.forward_agent = true
   # Vagrant box
   config.vm.box = "bento/ubuntu-18.04"
+  # Docker
+  config.vm.provision "docker"
   # Synced Folder
   config.vm.synced_folder '.', '/vagrant', disabled: true
 
