@@ -95,7 +95,7 @@
     - name: Pull repo for Swarm stacks
       git:
         repo: 'git@github.com:bcochofel/vagrant-docker-swarm-cluster.git'
-        dest: $HOME/vagrant-ansible-devops
+        dest: $HOME/vagrant-docker-swarm-cluster
         version: master
         accept_hostkey: yes
 
