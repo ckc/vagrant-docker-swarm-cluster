@@ -83,10 +83,3 @@
         name: web_ui
         compose:
           - $HOME/vagrant-docker-swarm-cluster/swarm-stacks/web_ui-stack/docker-compose.swarmpit.yml
-
-    - name: Create Monitoring UI stack
-      docker_stack:
-        state: present
-        name: monitoring
-        compose:
-          - $HOME/vagrant-docker-swarm-cluster/swarm-stacks/monitoring-stack/docker-compose.yml
