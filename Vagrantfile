@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
   # Forward ssh agent to easily ssh into the different machines
   config.ssh.forward_agent = true
   # Vagrant box
-  config.vm.box = "bento/ubuntu-18.04"
+  config.vm.box = "bento/ubuntu-20.04"
   # Docker
   config.vm.provision "docker"
   # Synced Folder
