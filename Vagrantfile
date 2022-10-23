@@ -4,8 +4,8 @@
 nodes = [
   { :hostname => 'swarm-master-1', :ip => '192.168.77.10', :ram => 2048, :cpus => 1 },
   { :hostname => 'swarm-master-2', :ip => '192.168.77.11', :ram => 2048, :cpus => 1 },
-  { :hostname => 'swarm-worker-1', :ip => '192.168.77.12', :ram => 2048, :cpus => 1 },
-  { :hostname => 'swarm-worker-2', :ip => '192.168.77.13', :ram => 2048, :cpus => 1 }
+  { :hostname => 'swarm-worker-1', :ip => '192.168.77.12', :ram => 4096, :cpus => 2 },
+  { :hostname => 'swarm-worker-2', :ip => '192.168.77.13', :ram => 4096, :cpus => 2 }
 ]
 
 Vagrant.configure("2") do |config|
