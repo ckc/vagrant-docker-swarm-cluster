@@ -44,7 +44,7 @@ services:
           - node.role == manager
 
   db:
-    image: couchdb:2.3.0
+    image: couchdb:3.2.2
     volumes:
       - db-data:/opt/couchdb/data
     networks:
